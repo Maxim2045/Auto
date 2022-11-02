@@ -16,7 +16,6 @@ namespace Auto.Plugins.nav_communication
         {
             try
             {
-
                 CommunicationHandler communicationHandler = new CommunicationHandler(crmObjects);
                 communicationHandler.ValidateMain();
             }

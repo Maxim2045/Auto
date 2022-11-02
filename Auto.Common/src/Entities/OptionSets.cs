@@ -457,12 +457,12 @@ namespace Auto.Common.src.Entities
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Ручное создание", 0, "#0000ff")]
-		@__808630000 = 808630000,
+		[OptionSetMetadataAttribute("auto", 1, "#0000ff")]
+		auto = 808630001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Автоматическое создание", 1, "#0000ff")]
-		@__808630001 = 808630001,
+		[OptionSetMetadataAttribute("manual", 0, "#0000ff")]
+		manual = 808630000,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]

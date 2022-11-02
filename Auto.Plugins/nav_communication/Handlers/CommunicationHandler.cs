@@ -34,18 +34,16 @@ namespace Auto.Plugins.nav_communication.Handlers
                     break;
                 case "UPDATE":
 
-                    var comFromCrm = crmObjects.Service.Retrieve("nav_communication", communication.Id, new ColumnSet(com.Fields.nav_type, com.Fields.nav_main, com.Fields.nav_contactid)).ToEntity<com>();
+                    var comFromCrm = crmObjects.Service.Retrieve("nav_communication", communication.Id, new ColumnSet(com.Fields.nav_type, com.Fields.nav_main, com.Fields.nav_contactid)).ToEntity<com>()
+                        ?? throw new InvalidPluginExecutionException("comFromCrm is null");
                     var resU = GetAllCommunicationFromUser(comFromCrm);
 
-                    var valueCompareType = communication.nav_type == null ? comFromCrm.nav_type ?? null : communication.nav_type;
-                    var valueCompareMain = communication.nav_main == null ? comFromCrm.nav_main ?? false : communication.nav_main;
-
-                    if (valueCompareMain == true && valueCompareType != null)
+                    if (communication.nav_main == true)
                     {
 
-                        if (resU.Count(x => x.nav_type == valueCompareType && x.nav_main == valueCompareMain) > 1)
+                        if (resU.Count(x => x.nav_type == comFromCrm.nav_type && x.nav_main == communication.nav_main) >= 1)
                         {
-                            throw new InvalidPluginExecutionException($"Срество связи с основным {communication.nav_type.Value} уже имеется"); // надо бы получить название типа
+                            throw new InvalidPluginExecutionException($"Срество связи с основным {comFromCrm.nav_type.Value} уже имеется"); // надо бы получить название типа
                         }
                         
                     }
@@ -55,6 +53,7 @@ namespace Auto.Plugins.nav_communication.Handlers
         }
         private IEnumerable<com> GetAllCommunicationFromUser(com communication)
         {
+            crmObjects.TracingService.Trace("Execute GetAllCommunicationFromUser");
 
             QueryExpression query = new QueryExpression(com.EntityLogicalName);
             query.ColumnSet = new ColumnSet(com.Fields.nav_type, com.Fields.nav_main);
@@ -63,8 +62,9 @@ namespace Auto.Plugins.nav_communication.Handlers
             //query.Criteria.AddFilter()
             query.Criteria.AddCondition(com.Fields.nav_contactid, ConditionOperator.Equal, communication.nav_contactid.Id);
 
-            crmObjects.TracingService.Trace("3 !!!!");
-            var result = crmObjects.Service.RetrieveMultiple(query).Entities.Select(x => x.ToEntity<com>());
+            var result = crmObjects.Service.RetrieveMultiple(query).Entities.Select(x => x.ToEntity<com>())
+                ?? throw new InvalidPluginExecutionException("GetAllCommunicationFromUser result is null");
+            crmObjects.TracingService.Trace("Return result GetAllCommunicationFromUser");
 
             return result;
         }

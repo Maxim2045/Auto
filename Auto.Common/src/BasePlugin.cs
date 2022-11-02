@@ -16,12 +16,13 @@ namespace Auto.Common.src
 
 
             crmObjects.ServiceProvider = serviceProvider;
-            crmObjects.TracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            crmObjects.TracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService)) ?? throw new InvalidPluginExecutionException();
 
-            crmObjects.PluginContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            crmObjects.PluginContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext)) ?? throw new InvalidPluginExecutionException();
 
-            IOrganizationServiceFactory serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
-            crmObjects.Service = serviceFactory.CreateOrganizationService(Guid.Empty);
+            IOrganizationServiceFactory serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))
+                ?? throw new InvalidPluginExecutionException();
+            crmObjects.Service = serviceFactory.CreateOrganizationService(Guid.Empty) ?? throw new InvalidPluginExecutionException();
 
             ExecutePlugin(crmObjects);
 

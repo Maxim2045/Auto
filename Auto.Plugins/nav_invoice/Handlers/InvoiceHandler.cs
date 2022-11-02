@@ -21,7 +21,7 @@ namespace Auto.Plugins.nav_invoice.Handlers
             var invoice = crmObjects.Target.ToEntity<Common.src.Entities.nav_invoice>();
             if(invoice.nav_type == null)
             {
-                invoice.nav_type = nav_invoice_nav_type.__808630000;
+                invoice.nav_type = nav_invoice_nav_type.manual;
             }
         }
     }

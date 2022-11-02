@@ -18,10 +18,10 @@ namespace Auto.Plugins.nav_invoice.Handlers
             switch (message)
             {
                 case "CREATE":
-                    crmObjects.TracingService.Trace("0 !!!!");
                     var invoiceC = crmObjects.Target.ToEntity<Common.src.Entities.nav_invoice>();
                     var agreementFromCrmC = crmObjects.Service.Retrieve("nav_agreement", invoiceC.nav_dogovorid.Id, new ColumnSet(Common.src.Entities.nav_agreement.Fields.nav_factsumma,
-                                                                                                                                    Common.src.Entities.nav_agreement.Fields.nav_summa));
+                                                                                                                                    Common.src.Entities.nav_agreement.Fields.nav_summa))
+                         ?? throw new InvalidPluginExecutionException("agreementFromCrmC is null");
                     UpdateAgreementFactSum(invoiceC, agreementFromCrmC, message);
 
                     break;
@@ -30,11 +30,13 @@ namespace Auto.Plugins.nav_invoice.Handlers
                     var invoiceU = crmObjects.Target.ToEntity<Common.src.Entities.nav_invoice>();
                     var invoiceFromCrmU = crmObjects.Service.Retrieve("nav_invoice", invoiceU.Id, new ColumnSet(Common.src.Entities.nav_invoice.Fields.nav_fact,
                                                                                                                 Common.src.Entities.nav_invoice.Fields.nav_dogovorid,
-                                                                                                                Common.src.Entities.nav_invoice.Fields.nav_amount));
+                                                                                                                Common.src.Entities.nav_invoice.Fields.nav_amount))
+                         ?? throw new InvalidPluginExecutionException("invoiceFromCrmU is null");
 
                     var agreementFromCrmU = crmObjects.Service.Retrieve("nav_agreement", invoiceFromCrmU.ToEntity<Common.src.Entities.nav_invoice>().nav_dogovorid.Id, new ColumnSet(Common.src.Entities.nav_agreement.Fields.nav_factsumma,
-                                                                                                                                                                                      Common.src.Entities.nav_agreement.Fields.nav_summa));
-                    crmObjects.TracingService.Trace("666 !!!!");
+                                                                                                                                                                                      Common.src.Entities.nav_agreement.Fields.nav_summa))
+                         ?? throw new InvalidPluginExecutionException("agreementFromCrmU is null");
+                
                     UpdateAgreementFactSum(invoiceFromCrmU.ToEntity<Common.src.Entities.nav_invoice>(), agreementFromCrmU, message);
 
                     break;
@@ -42,9 +44,11 @@ namespace Auto.Plugins.nav_invoice.Handlers
                     var invoiceD = crmObjects.TargetRef;
                     var invoiceFromCrmD = crmObjects.Service.Retrieve("nav_invoice", invoiceD.Id, new ColumnSet(Common.src.Entities.nav_invoice.Fields.nav_fact,
                                                                                                                 Common.src.Entities.nav_invoice.Fields.nav_dogovorid,
-                                                                                                                Common.src.Entities.nav_invoice.Fields.nav_amount));
+                                                                                                                Common.src.Entities.nav_invoice.Fields.nav_amount))
+                        ?? throw new InvalidPluginExecutionException("invoiceFromCrmD is null");
 
-                    var agreementFromCrmD = crmObjects.Service.Retrieve("nav_agreement", invoiceFromCrmD.ToEntity<Common.src.Entities.nav_invoice>().nav_dogovorid.Id, new ColumnSet(Common.src.Entities.nav_agreement.Fields.nav_factsumma));
+                    var agreementFromCrmD = crmObjects.Service.Retrieve("nav_agreement", invoiceFromCrmD.ToEntity<Common.src.Entities.nav_invoice>().nav_dogovorid.Id, new ColumnSet(Common.src.Entities.nav_agreement.Fields.nav_factsumma))
+                          ?? throw new InvalidPluginExecutionException("agreementFromCrmD is null");
                     UpdateAgreementFactSum(invoiceFromCrmD.ToEntity<Common.src.Entities.nav_invoice>(), agreementFromCrmD, message);
 
                     break;
@@ -58,6 +62,8 @@ namespace Auto.Plugins.nav_invoice.Handlers
                 agreement.Id = invoice.nav_dogovorid.Id;
                 if (invoice.nav_fact == true && message != "DELETE")
                 {
+                    crmObjects.TracingService.Trace("addition condition");
+
                     var agreemntCrm = agreementFromCrm.ToEntity<Common.src.Entities.nav_agreement>();
 
                     decimal existSum = agreemntCrm.nav_factsumma == null ? 0 : agreemntCrm.nav_factsumma.Value;
@@ -73,6 +79,8 @@ namespace Auto.Plugins.nav_invoice.Handlers
                             nav_paydate = DateTime.Now
                         };
                         crmObjects.Service.Update(nav_Invoice);
+
+                        crmObjects.TracingService.Trace("agreement isn`t full payed condition");
                     }
                     else if(agreementSum == existSum + inputAmount)
                     {
@@ -86,23 +94,28 @@ namespace Auto.Plugins.nav_invoice.Handlers
                         crmObjects.Service.Update(nav_Invoice);
 
                         agreement.nav_fact = true;
+
+                        crmObjects.TracingService.Trace("agreement is full payed condition");
                     }
                     else
 
                     {
                         throw new InvalidPluginExecutionException("Сумма счетов больше суммы договора");
                     }
+             
                 }
                 else
                 {
-                    crmObjects.TracingService.Trace("0 !!!!");
-                    decimal existSum = agreementFromCrm.ToEntity<Common.src.Entities.nav_agreement>().nav_factsumma == null ? 0 : agreementFromCrm.ToEntity<Common.src.Entities.nav_agreement>().nav_factsumma.Value;
-                    crmObjects.TracingService.Trace("1 !!!!");
-                    decimal inputAmount = invoice.nav_amount == null ? 0 : invoice.nav_amount.Value;
-                    crmObjects.TracingService.Trace("2 !!!!");
-                    agreement.nav_factsumma = new Money(existSum - inputAmount);
-                    crmObjects.TracingService.Trace("3 !!!!");
-                    agreement.nav_factsumma = agreement.nav_factsumma.Value < 0 ? new Money(0) : agreement.nav_factsumma;
+                    if ((invoice.nav_fact == false && message == "UPDATE") || (invoice.nav_fact == true && message == "DELETE"))
+                    {
+                        crmObjects.TracingService.Trace("subtraction condition");
+
+                        decimal existSum = agreementFromCrm.ToEntity<Common.src.Entities.nav_agreement>().nav_factsumma == null ? 0 : agreementFromCrm.ToEntity<Common.src.Entities.nav_agreement>().nav_factsumma.Value;
+
+                        decimal inputAmount = invoice.nav_amount == null ? 0 : invoice.nav_amount.Value;
+                        agreement.nav_factsumma = new Money(existSum - inputAmount);
+                        agreement.nav_factsumma = agreement.nav_factsumma.Value < 0 ? new Money(0) : agreement.nav_factsumma;
+                    }
                 }
 
                 crmObjects.Service.Update(agreement);

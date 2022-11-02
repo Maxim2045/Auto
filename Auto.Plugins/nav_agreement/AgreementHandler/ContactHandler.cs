@@ -1,12 +1,7 @@
-﻿using Auto.Common.src.Entities;
-using Auto.Common.src;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Auto.Common.src;
+using Auto.Common.src.Entities;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using System.Security.Principal;
 
 namespace Auto.Plugins.nav_agreement.AgreementHandler
 {
@@ -20,7 +15,8 @@ namespace Auto.Plugins.nav_agreement.AgreementHandler
         public void SetFirstAgreementDate()
         {
             var agreement = crmObjects.Target.ToEntity<Common.src.Entities.nav_agreement>();
-            var contactFromCrm = crmObjects.Service.Retrieve("contact", agreement.nav_contact.Id, new ColumnSet(Contact.Fields.nav_date));
+            var contactFromCrm = crmObjects.Service.Retrieve("contact", agreement.nav_contact.Id, new ColumnSet(Contact.Fields.nav_date))
+                ?? throw new InvalidPluginExecutionException("contactFromCrm is null");
 
             if (contactFromCrm.ToEntity<Contact>().nav_date == null)
             {
