@@ -12,7 +12,7 @@ namespace Auto.Plugins.nav_invoice
 {
     public class PostInvoiceCUD: BasePlugin
     {
-        public override void ExecutePlugin(CrmObjects crmObjects)
+        public override void ExecutePlugin(PluginObjects crmObjects)
         {
             try
             {

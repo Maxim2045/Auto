@@ -12,7 +12,7 @@ namespace Auto.Plugins.nav_agreement
 {
     public class PostAgreementCreate: BasePlugin
     {
-        public override void ExecutePlugin(CrmObjects crmObjects)
+        public override void ExecutePlugin(PluginObjects crmObjects)
         {
 
             try

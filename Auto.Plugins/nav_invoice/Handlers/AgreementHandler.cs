@@ -7,8 +7,8 @@ namespace Auto.Plugins.nav_invoice.Handlers
 {
     public class AgreementHandler
     {
-        private readonly CrmObjects crmObjects;
-        public AgreementHandler(CrmObjects crmObjects)
+        private readonly PluginObjects crmObjects;
+        public AgreementHandler(PluginObjects crmObjects)
         {
             this.crmObjects = crmObjects;
         }

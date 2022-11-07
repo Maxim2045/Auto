@@ -9,48 +9,39 @@ using System.Threading.Tasks;
 using Auto.Common.src.Entities;
 using Auto.Common.src;
 using Microsoft.Xrm.Sdk.Query;
+using Auto.Workflows.AgreementActivities.InvoiceFullPayHelpers;
 
 namespace Auto.Workflows.AgreementActivities
 {
-    public class InvoiceFullPayActivity: CodeActivity
+    public class InvoiceFullPayActivity : BaseActivity
     {
         [Input("Agreement")]
         [RequiredArgument]
         [ReferenceTarget("nav_agreement")]
         public InArgument<EntityReference> AgreementReference { get; set; }
         [Output("Is paym exist")]
-        public OutArgument<bool> IsHasInvoice{ get; set; }
-        protected override void Execute(CodeActivityContext context)
+        public OutArgument<bool> HasInvoice { get; set; }
+        public override void ExecuteAcivity(ActivityObjects activityObjects)
         {
-            var serviceFactory = context.GetExtension<IOrganizationServiceFactory>() ?? throw new InvalidPluginExecutionException();
 
-            var service = serviceFactory.CreateOrganizationService(null) ?? throw new InvalidPluginExecutionException();
-
-
-            var agreementRef = AgreementReference.Get(context) ?? throw new InvalidPluginExecutionException(); 
-
-
-
-            QueryExpression query = new QueryExpression(nav_invoice.EntityLogicalName);
-            query.ColumnSet = new ColumnSet(nav_invoice.Fields.nav_name);
-            query.NoLock = true;
-            query.TopCount = 1000;
-            query.Criteria.AddCondition(nav_invoice.Fields.nav_dogovorid, ConditionOperator.Equal, agreementRef.Id);
-
-            //var result = service.RetrieveMultiple(query).Entities.Select(x => x.ToEntity<nav_invoice>())
-            //
-            var result = service.RetrieveMultiple(query).Entities;
-
-            if (result.Any())
+            try
             {
-                IsHasInvoice.Set(context, true);
-            }
-            else
-            {
-                IsHasInvoice.Set(context, false);
+                var agreementRef = AgreementReference.Get(activityObjects.Context) ?? throw new InvalidPluginExecutionException("Agreement not set");
+
+                InvoiceFullPaymHelper invoiceFullPaym = new InvoiceFullPaymHelper(activityObjects);
+                bool hasInvoice = invoiceFullPaym.HasAgreementInvoice(agreementRef);
+ 
+                HasInvoice.Set(activityObjects.Context, hasInvoice);
             }
 
+            catch (Exception ex)
+            {
 
+                throw new InvalidPluginExecutionException(ex.Message);
+            }
         }
+
+
     }
 }
+

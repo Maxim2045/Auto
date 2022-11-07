@@ -3,7 +3,7 @@ using System;
 
 namespace Auto.Common.src
 {
-    public class CrmObjects
+    public class PluginObjects
     {
         public IServiceProvider ServiceProvider { get; set; }
         public ITracingService TracingService { get; set; }

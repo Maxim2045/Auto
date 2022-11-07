@@ -12,7 +12,7 @@ namespace Auto.Plugins.nav_communication
 {
     public class PreValidateCommunicationCU: BasePlugin
     {
-        public override void ExecutePlugin(CrmObjects crmObjects)
+        public override void ExecutePlugin(PluginObjects crmObjects)
         {
             try
             {

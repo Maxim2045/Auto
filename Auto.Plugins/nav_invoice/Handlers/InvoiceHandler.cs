@@ -11,8 +11,8 @@ namespace Auto.Plugins.nav_invoice.Handlers
 {
     public class InvoiceHandler
     {
-        private readonly CrmObjects crmObjects;
-        public InvoiceHandler(CrmObjects crmObjects)
+        private readonly PluginObjects crmObjects;
+        public InvoiceHandler(PluginObjects crmObjects)
         {
             this.crmObjects = crmObjects;
         }

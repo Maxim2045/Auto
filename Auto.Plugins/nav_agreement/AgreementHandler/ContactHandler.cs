@@ -7,8 +7,8 @@ namespace Auto.Plugins.nav_agreement.AgreementHandler
 {
     public class ContactHandler
     {
-        private readonly CrmObjects crmObjects;
-        public ContactHandler(CrmObjects crmObjects)
+        private readonly PluginObjects crmObjects;
+        public ContactHandler(PluginObjects crmObjects)
         {
             this.crmObjects = crmObjects;
         }

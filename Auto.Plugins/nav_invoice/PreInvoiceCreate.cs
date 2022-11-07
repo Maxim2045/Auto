@@ -11,7 +11,7 @@ namespace Auto.Plugins.nav_invoice
 {
     public class PreInvoiceCreate : BasePlugin
     {
-        public override void ExecutePlugin(CrmObjects crmObjects)
+        public override void ExecutePlugin(PluginObjects crmObjects)
         {
             try
             {

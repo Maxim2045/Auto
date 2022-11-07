@@ -10,8 +10,8 @@ namespace Auto.Plugins.nav_communication.Handlers
 {
     public class CommunicationHandler
     {
-        private readonly CrmObjects crmObjects;
-        public CommunicationHandler(CrmObjects crmObjects)
+        private readonly PluginObjects crmObjects;
+        public CommunicationHandler(PluginObjects crmObjects)
         {
             this.crmObjects = crmObjects;
         }

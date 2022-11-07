@@ -1,17 +1,13 @@
-﻿using Microsoft.Xrm.Sdk.Workflow;
+﻿using Auto.Common.src;
+using Auto.Workflows.AgreementActivities.ValidatePayScheduleCreateHelpers;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Workflow;
 using System;
 using System.Activities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Auto.Common.src.Entities;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace Auto.Workflows.AgreementActivities
 {
-    public class ValidatePaysScheduleCreateActivity : CodeActivity
+    public class ValidatePaysScheduleCreateActivity : BaseActivity
     {
         [Input("Agreement")]
         [RequiredArgument]
@@ -19,51 +15,25 @@ namespace Auto.Workflows.AgreementActivities
         public InArgument<EntityReference> AgreementReference { get; set; }
         [Output("Validated")]
         public OutArgument<bool> IsValid { get; set; }
-        protected override void Execute(CodeActivityContext context)
+        public override void ExecuteAcivity(ActivityObjects activityObjects)
         {
-            var serviceFactory = context.GetExtension<IOrganizationServiceFactory>() ?? throw new InvalidPluginExecutionException();
-
-            var service = serviceFactory.CreateOrganizationService(null) ?? throw new InvalidPluginExecutionException();
-       
-                var tracingService = context.GetExtension<ITracingService>();
-
-
-            var agreementRef = AgreementReference.Get(context) ?? throw new InvalidPluginExecutionException();
-
-          //  tracingService.Trace("1 !!!!!");
-
-
-            QueryExpression query = new QueryExpression(nav_invoice.EntityLogicalName);
-            query.ColumnSet = new ColumnSet(nav_invoice.Fields.nav_fact, nav_invoice.Fields.nav_type);
-            query.NoLock = true;
-            query.TopCount = 1000;
-            query.Criteria.AddCondition(nav_invoice.Fields.nav_dogovorid, ConditionOperator.Equal, agreementRef.Id);
-
-            //  var result = service.RetrieveMultiple(query).Entities.Select(x => x.ToEntity<nav_invoice>())
-            //      ?? throw new InvalidPluginExecutionException("result is null");
-
-            var result = service.RetrieveMultiple(query).Entities;
-
-         //   tracingService.Trace("2 !!!!!");
-
-            if (result != null)
+            try
             {
 
-                tracingService.Trace("3 !!!!!");
-                if (result.Select(x => x.ToEntity<nav_invoice>()).Where(x => x.nav_type == nav_invoice_nav_type.manual || (x.nav_fact ?? false)).Any())
-                {
-                    IsValid.Set(context, false);
-                    tracingService.Trace("4 !!!!!");
-                }
-                else
-                {
-                    IsValid.Set(context, true);
-                }
+                var agreementRef = AgreementReference.Get(activityObjects.Context) ?? throw new InvalidPluginExecutionException("Agreement not set");
+
+                ValidatePayScheduleCreateHelper validatePayScheduleCreateHelper = new ValidatePayScheduleCreateHelper(activityObjects);
+
+                bool isValid = validatePayScheduleCreateHelper.Validate(agreementRef);
+
+                IsValid.Set(activityObjects.Context, isValid);
             }
-            else
+            catch (Exception ex)
             {
-                IsValid.Set(context, true);
+
+                throw new InvalidPluginExecutionException(ex.Message);
             }
+
         }
     }
 }

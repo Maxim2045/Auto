@@ -114,7 +114,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgreementActivities\InvoiceFullPayActivity.cs" />
+    <Compile Include="AgreementActivities\InvoiceFullPayHelpers\InvoiceFullPaymHelper.cs" />
+    <Compile Include="AgreementActivities\PayScheduleHelpers\InvoiceHelper.cs" />
+    <Compile Include="AgreementActivities\PayScheduleHelpers\PayScheduleHelper.cs" />
     <Compile Include="AgreementActivities\PaysScheduleActivity.cs" />
+    <Compile Include="AgreementActivities\ValidatePayScheduleCreateHelpers\ValidatePayScheduleCreateHelper.cs" />
     <Compile Include="AgreementActivities\ValidatePaysScheduleCreateActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -129,6 +133,7 @@
       <Name>Auto.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
