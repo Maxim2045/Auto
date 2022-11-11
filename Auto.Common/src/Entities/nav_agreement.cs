@@ -49,6 +49,7 @@ namespace Auto.Common.src.Entities
 			public const string nav_creditid = "nav_creditid";
 			public const string nav_creditperiod = "nav_creditperiod";
 			public const string nav_date = "nav_date";
+			public const string nav_defaultdate = "nav_defaultdate";
 			public const string nav_fact = "nav_fact";
 			public const string nav_factsumma = "nav_factsumma";
 			public const string nav_factsumma_Base = "nav_factsumma_base";
@@ -56,6 +57,7 @@ namespace Auto.Common.src.Entities
 			public const string nav_fullcreditamount_Base = "nav_fullcreditamount_base";
 			public const string nav_initialfee = "nav_initialfee";
 			public const string nav_initialfee_Base = "nav_initialfee_base";
+			public const string nav_month = "nav_month";
 			public const string nav_name = "nav_name";
 			public const string nav_paymentplandate = "nav_paymentplandate";
 			public const string nav_summa = "nav_summa";
@@ -71,9 +73,6 @@ namespace Auto.Common.src.Entities
 			public const string TransactionCurrencyId = "transactioncurrencyid";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
-			public const string nav_contact_nav_agreement_contact = "nav_contact_nav_agreement_contact";
-			public const string nav_nav_auto_nav_agreement_autoid = "nav_nav_auto_nav_agreement_autoid";
-			public const string nav_nav_credit_nav_agreement_creditid = "nav_nav_credit_nav_agreement_creditid";
 		}
 		
 		/// <summary>
@@ -423,6 +422,19 @@ namespace Auto.Common.src.Entities
 		/// <summary>
 		/// 
 		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("nav_defaultdate")]
+		public System.Nullable<System.DateTime> nav_defaultdate
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("nav_defaultdate");
+			}
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("nav_fact")]
 		public System.Nullable<bool> nav_fact
 		{
@@ -536,6 +548,26 @@ namespace Auto.Common.src.Entities
 			get
 			{
 				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("nav_initialfee_base");
+			}
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("nav_month")]
+		public System.Nullable<int> nav_month
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("nav_month");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.OnPropertyChanging("nav_month");
+				this.SetAttributeValue("nav_month", value);
+				this.OnPropertyChanged("nav_month");
 			}
 		}
 		
@@ -816,89 +848,6 @@ namespace Auto.Common.src.Entities
 			get
 			{
 				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
-			}
-		}
-		
-		/// <summary>
-		/// 1:N nav_nav_agreement_nav_invoice_dogovorid
-		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("nav_nav_agreement_nav_invoice_dogovorid")]
-		public System.Collections.Generic.IEnumerable<Auto.Common.src.Entities.nav_invoice> nav_nav_agreement_nav_invoice_dogovorid
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntities<Auto.Common.src.Entities.nav_invoice>("nav_nav_agreement_nav_invoice_dogovorid", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.OnPropertyChanging("nav_nav_agreement_nav_invoice_dogovorid");
-				this.SetRelatedEntities<Auto.Common.src.Entities.nav_invoice>("nav_nav_agreement_nav_invoice_dogovorid", null, value);
-				this.OnPropertyChanged("nav_nav_agreement_nav_invoice_dogovorid");
-			}
-		}
-		
-		/// <summary>
-		/// N:1 nav_contact_nav_agreement_contact
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("nav_contact")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("nav_contact_nav_agreement_contact")]
-		public Auto.Common.src.Entities.Contact nav_contact_nav_agreement_contact
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntity<Auto.Common.src.Entities.Contact>("nav_contact_nav_agreement_contact", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.OnPropertyChanging("nav_contact_nav_agreement_contact");
-				this.SetRelatedEntity<Auto.Common.src.Entities.Contact>("nav_contact_nav_agreement_contact", null, value);
-				this.OnPropertyChanged("nav_contact_nav_agreement_contact");
-			}
-		}
-		
-		/// <summary>
-		/// N:1 nav_nav_auto_nav_agreement_autoid
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("nav_autoid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("nav_nav_auto_nav_agreement_autoid")]
-		public Auto.Common.src.Entities.nav_auto nav_nav_auto_nav_agreement_autoid
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntity<Auto.Common.src.Entities.nav_auto>("nav_nav_auto_nav_agreement_autoid", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.OnPropertyChanging("nav_nav_auto_nav_agreement_autoid");
-				this.SetRelatedEntity<Auto.Common.src.Entities.nav_auto>("nav_nav_auto_nav_agreement_autoid", null, value);
-				this.OnPropertyChanged("nav_nav_auto_nav_agreement_autoid");
-			}
-		}
-		
-		/// <summary>
-		/// N:1 nav_nav_credit_nav_agreement_creditid
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("nav_creditid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("nav_nav_credit_nav_agreement_creditid")]
-		public Auto.Common.src.Entities.nav_credit nav_nav_credit_nav_agreement_creditid
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntity<Auto.Common.src.Entities.nav_credit>("nav_nav_credit_nav_agreement_creditid", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.OnPropertyChanging("nav_nav_credit_nav_agreement_creditid");
-				this.SetRelatedEntity<Auto.Common.src.Entities.nav_credit>("nav_nav_credit_nav_agreement_creditid", null, value);
-				this.OnPropertyChanged("nav_nav_credit_nav_agreement_creditid");
 			}
 		}
 		

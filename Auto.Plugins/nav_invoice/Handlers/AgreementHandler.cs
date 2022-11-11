@@ -12,7 +12,46 @@ namespace Auto.Plugins.nav_invoice.Handlers
         {
             this.crmObjects = crmObjects;
         }
-        public void SetFactsum()
+
+        public void CreateFactsum()
+        {
+            var invoiceC = crmObjects.Target.ToEntity<Common.src.Entities.nav_invoice>();
+            var agreementFromCrmC = crmObjects.Service.Retrieve("nav_agreement", invoiceC.nav_dogovorid.Id, new ColumnSet(Common.src.Entities.nav_agreement.Fields.nav_factsumma,
+                                                                                                                            Common.src.Entities.nav_agreement.Fields.nav_summa))
+                 ?? throw new InvalidPluginExecutionException("agreementFromCrmC is null");
+            UpdateAgreementFactSum(invoiceC, agreementFromCrmC);
+        }
+
+        public void UpdateFactsum()
+        {
+            crmObjects.TracingService.Trace("0 !!!!");
+            var invoiceU = crmObjects.Target.ToEntity<Common.src.Entities.nav_invoice>();
+            var invoiceFromCrmU = crmObjects.Service.Retrieve("nav_invoice", invoiceU.Id, new ColumnSet(Common.src.Entities.nav_invoice.Fields.nav_fact,
+                                                                                                        Common.src.Entities.nav_invoice.Fields.nav_dogovorid,
+                                                                                                        Common.src.Entities.nav_invoice.Fields.nav_amount))
+                 ?? throw new InvalidPluginExecutionException("invoiceFromCrmU is null");
+
+            var agreementFromCrmU = crmObjects.Service.Retrieve("nav_agreement", invoiceFromCrmU.ToEntity<Common.src.Entities.nav_invoice>().nav_dogovorid.Id, new ColumnSet(Common.src.Entities.nav_agreement.Fields.nav_factsumma,
+                                                                                                                                                                              Common.src.Entities.nav_agreement.Fields.nav_summa))
+                 ?? throw new InvalidPluginExecutionException("agreementFromCrmU is null");
+
+            UpdateAgreementFactSum(invoiceFromCrmU.ToEntity<Common.src.Entities.nav_invoice>(), agreementFromCrmU);
+
+        }
+
+        public void DeleteFactsum()
+        {
+            var invoiceD = crmObjects.TargetRef;
+            var invoiceFromCrmD = crmObjects.Service.Retrieve("nav_invoice", invoiceD.Id, new ColumnSet(Common.src.Entities.nav_invoice.Fields.nav_fact,
+                                                                                                        Common.src.Entities.nav_invoice.Fields.nav_dogovorid,
+                                                                                                        Common.src.Entities.nav_invoice.Fields.nav_amount))
+                ?? throw new InvalidPluginExecutionException("invoiceFromCrmD is null");
+
+            var agreementFromCrmD = crmObjects.Service.Retrieve("nav_agreement", invoiceFromCrmD.ToEntity<Common.src.Entities.nav_invoice>().nav_dogovorid.Id, new ColumnSet(Common.src.Entities.nav_agreement.Fields.nav_factsumma))
+                  ?? throw new InvalidPluginExecutionException("agreementFromCrmD is null");
+            UpdateAgreementFactSum(invoiceFromCrmD.ToEntity<Common.src.Entities.nav_invoice>(), agreementFromCrmD);
+        }
+         /*   public void SetFactsum()
         {
             var message = crmObjects.PluginContext.MessageName.ToUpper();
             switch (message)
@@ -53,9 +92,10 @@ namespace Auto.Plugins.nav_invoice.Handlers
 
                     break;
             }
-        }
-        private void UpdateAgreementFactSum(Common.src.Entities.nav_invoice invoice, Entity agreementFromCrm, string message)
+        }*/
+        private void UpdateAgreementFactSum(Common.src.Entities.nav_invoice invoice, Entity agreementFromCrm)
         {
+            var message = crmObjects.PluginContext.MessageName.ToUpper();
             if (invoice.nav_fact != null)
             {
                 Common.src.Entities.nav_agreement agreement = new Common.src.Entities.nav_agreement();

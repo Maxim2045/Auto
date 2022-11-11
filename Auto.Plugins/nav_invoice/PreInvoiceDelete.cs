@@ -1,23 +1,18 @@
 ﻿using Auto.Common.src;
-using Auto.Plugins.nav_communication.Handlers;
 using Auto.Plugins.nav_invoice.Handlers;
 using Microsoft.Xrm.Sdk;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Auto.Plugins.nav_communication
+namespace Auto.Plugins.nav_invoice
 {
-    public class PreValidateCommunicationCU: BasePlugin
+    public class PreInvoiceDelete: BasePlugin
     {
         public override void ExecutePlugin(PluginObjects crmObjects)
         {
             try
             {
-                CommunicationHandler communicationHandler = new CommunicationHandler(crmObjects);
-                communicationHandler.ValidateMain();
+                AgreementHandler agreementHandler = new AgreementHandler(crmObjects);
+                agreementHandler.DeleteFactsum();
             }
             catch (Exception ex)
             {

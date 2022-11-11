@@ -30,18 +30,6 @@ namespace Auto.Common.src.Entities
 		}
 		
 		/// <summary>
-		/// Gets a binding to the set of all <see cref="Auto.Common.src.Entities.Contact"/> entities.
-		/// </summary>
-		public System.Linq.IQueryable<Auto.Common.src.Entities.Contact> ContactSet
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.CreateQuery<Auto.Common.src.Entities.Contact>();
-			}
-		}
-		
-		/// <summary>
 		/// Gets a binding to the set of all <see cref="Auto.Common.src.Entities.nav_agreement"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<Auto.Common.src.Entities.nav_agreement> nav_agreementSet
@@ -50,78 +38,6 @@ namespace Auto.Common.src.Entities
 			get
 			{
 				return this.CreateQuery<Auto.Common.src.Entities.nav_agreement>();
-			}
-		}
-		
-		/// <summary>
-		/// Gets a binding to the set of all <see cref="Auto.Common.src.Entities.nav_auto"/> entities.
-		/// </summary>
-		public System.Linq.IQueryable<Auto.Common.src.Entities.nav_auto> nav_autoSet
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.CreateQuery<Auto.Common.src.Entities.nav_auto>();
-			}
-		}
-		
-		/// <summary>
-		/// Gets a binding to the set of all <see cref="Auto.Common.src.Entities.nav_brand"/> entities.
-		/// </summary>
-		public System.Linq.IQueryable<Auto.Common.src.Entities.nav_brand> nav_brandSet
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.CreateQuery<Auto.Common.src.Entities.nav_brand>();
-			}
-		}
-		
-		/// <summary>
-		/// Gets a binding to the set of all <see cref="Auto.Common.src.Entities.nav_communication"/> entities.
-		/// </summary>
-		public System.Linq.IQueryable<Auto.Common.src.Entities.nav_communication> nav_communicationSet
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.CreateQuery<Auto.Common.src.Entities.nav_communication>();
-			}
-		}
-		
-		/// <summary>
-		/// Gets a binding to the set of all <see cref="Auto.Common.src.Entities.nav_credit"/> entities.
-		/// </summary>
-		public System.Linq.IQueryable<Auto.Common.src.Entities.nav_credit> nav_creditSet
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.CreateQuery<Auto.Common.src.Entities.nav_credit>();
-			}
-		}
-		
-		/// <summary>
-		/// Gets a binding to the set of all <see cref="Auto.Common.src.Entities.nav_invoice"/> entities.
-		/// </summary>
-		public System.Linq.IQueryable<Auto.Common.src.Entities.nav_invoice> nav_invoiceSet
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.CreateQuery<Auto.Common.src.Entities.nav_invoice>();
-			}
-		}
-		
-		/// <summary>
-		/// Gets a binding to the set of all <see cref="Auto.Common.src.Entities.nav_model"/> entities.
-		/// </summary>
-		public System.Linq.IQueryable<Auto.Common.src.Entities.nav_model> nav_modelSet
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.CreateQuery<Auto.Common.src.Entities.nav_model>();
 			}
 		}
 	}

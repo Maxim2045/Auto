@@ -15,7 +15,38 @@ namespace Auto.Plugins.nav_communication.Handlers
         {
             this.crmObjects = crmObjects;
         }
-        public void ValidateMain()
+
+        public void ValidateMainForCreate()
+        {
+            var communication = crmObjects.Target.ToEntity<com>();
+            var resC = GetAllCommunicationFromUser(communication);
+            if (communication.nav_main == true)
+            {
+                if (resC.Count(x => x.nav_type == communication.nav_type && x.nav_main == communication.nav_main) >= 1)
+                {
+                    throw new InvalidPluginExecutionException($"Срество связи с основным {communication.nav_type.Value} уже имеется");
+                }
+            }
+        }
+        public void ValidateMainForUpdate()
+        {
+            var communication = crmObjects.Target.ToEntity<com>();
+            var comFromCrm = crmObjects.Service.Retrieve("nav_communication", communication.Id, new ColumnSet(com.Fields.nav_type, com.Fields.nav_main, com.Fields.nav_contactid)).ToEntity<com>()
+                       ?? throw new InvalidPluginExecutionException("comFromCrm is null");
+            var resU = GetAllCommunicationFromUser(comFromCrm);
+
+            if (communication.nav_main == true)
+            {
+
+                if (resU.Count(x => x.nav_type == comFromCrm.nav_type && x.nav_main == communication.nav_main) >= 1)
+                {
+                    throw new InvalidPluginExecutionException($"Срество связи с основным {comFromCrm.nav_type.Value} уже имеется"); // надо бы получить название типа
+                }
+
+            }
+        }
+
+      /*  public void ValidateMain()
         {
             var communication = crmObjects.Target.ToEntity<com>();
 
@@ -50,7 +81,7 @@ namespace Auto.Plugins.nav_communication.Handlers
                     break;
             }
         
-        }
+        }*/
         private IEnumerable<com> GetAllCommunicationFromUser(com communication)
         {
             crmObjects.TracingService.Trace("Execute GetAllCommunicationFromUser");
